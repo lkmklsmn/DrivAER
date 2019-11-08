@@ -1,5 +1,6 @@
-# DrivAER for Manifold interpretation
-DrivAER (identification of **Driv**ing transcription programs based on **A**uto**E**ncoder derived **R**elevance scores) infers relevance scores for transcription programs with respect to specified variables of interest, which allows researchers to prioritize transcription programs and identify when and where transcription programs are being up/down-regulated with high cellular resolution.
+# DrivAER for Manifold interpretation of scRNA-seq data
+DrivAER is a method for identification of **Driv**ing transcription programs based on **A**uto**E**ncoder derived **R**elevance scores. 
+It infers relevance scores for transcription programs with respect to specified variables of interest, which allows researchers to prioritize transcription programs and identify when and where transcription programs are being up/down-regulated with high cellular resolution.
 
 See our manuscript and tutorial for more details.
 
@@ -18,16 +19,16 @@ See our manuscript and tutorial for more details.
 3. Heatmap of a specific transcriptional program
 
 ## Usage
-### raw count matrix
-	count = sc.read("file.txt", sep="\t", first_column_names=True,cache=True)
-### pseudotime
-	pt = pd.read_csv("file.txt")
-### user-defined target gene set 
+### Load raw count matrix and phenotype
+	your_count
+	your_pt
+### Load target gene set 
 	C3_mouse =get_anno(filename="C3.gmt",transfer=True)
 ### Run enrich_test
-	res = enrich_test(count = count, pheno = pt, tf_targets = C3_mouse, min_targets=5, datatype = "continuous")
+	import DrivAER as dv
+	res = dv.enrich_test(count = your_count, pheno = your_pt, tf_targets = C3_mouse, min_targets=5, datatype = "continuous")
 ### Get output plot
-	rank_plot(res,save=True)
-	enrich_plot_tf(result, tf_name, pheno, datatype, save)
-	enrich_plot_marker(result, tf_name, gene, count, save)
-	heatmap(result,tf_name)
+	dv.rank_plot(res, save)
+	dv.enrich_plot_tf(result, tf_name, pheno, datatype, save)
+	dv.enrich_plot_marker(result, count, tf_name, gene, save)
+	dv.heatmap(result, tf_name, save)
