@@ -8,7 +8,7 @@ See our manuscript and tutorial for more details.
 	pip install -i https://test.pypi.org/simple/ DrivAER==0.0.1
 
 ## Input
-	raw count matrix
+1. raw count matrix
 2. variables of interest (cluster/pseudotemporal trajectory)
 3. (optional) user-defiend target gene set
 
