@@ -1,0 +1,8 @@
+sklearn
+scanpy
+anndata
+pandas
+seaborn
+matplotlib
+dca
+tensorflow

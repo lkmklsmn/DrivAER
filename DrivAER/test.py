@@ -1,7 +1,7 @@
 import scanpy as sc
 import pandas as pd
 import os
-from .rele_score import enrich_test,rank_plot,enrich_plot_tf
+from .rele_score import calc_relevance,rank_plot,embedding_plot
 from .anno import get_anno
 
 path = os.path.dirname(os.path.abspath(__file__))
