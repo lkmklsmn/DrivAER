@@ -12,7 +12,7 @@ from sklearn.preprocessing import StandardScaler
 my_counter = 0
 path = os.path.dirname(os.path.abspath(__file__))
 
-def enrich_test(pheno, tf_targets, count, min_targets, datatype):
+def calc_relevance(pheno, tf_targets, count, min_targets, datatype):
     gene = count.var_names.tolist()
     # Restrict to expressed target genes
     tf_targets = tf_targets.map(lambda x: sorted(list(set(x) & set(gene))))
@@ -67,7 +67,7 @@ def rank_plot(result,save):
     worse_TF = score.tail(n=5)['Signature'].tolist()
     print("Worse_TF",":",worse_TF)
 
-def enrich_plot_tf(result, tf_name, pheno, datatype, save):
+def embedding_plot(result, tf_name, pheno, datatype, save):
     em = pd.DataFrame(result[0][tf_name],columns=['dca1','dca2'])
     plt.figure(figsize=(10, 8))
     if datatype == "continuous":
@@ -87,7 +87,7 @@ def enrich_plot_tf(result, tf_name, pheno, datatype, save):
     if save:
         fig.savefig(path + tf_name + '.svg', bbox_inches='tight')
 
-def enrich_plot_marker(result, tf_name, gene, count, save):
+def gene_plot(result, tf_name, gene, count, save):
     embedding = result[0][tf_name]
     plt.figure(figsize=(10,8))
     plt.title(gene,fontsize=30)
