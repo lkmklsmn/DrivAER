@@ -10,12 +10,12 @@ See our manuscript and [tutorial](https://github.com/lkmklsmn/TFscoring/blob/mas
 
 ## Input
 1. raw count matrix
-2. variables of interest (cluster/pseudotemporal trajectory)
-3. (optional) user-defiend target gene set
+2. outcome of interest (pseudotemporal ordering/cell grouping)
+3. (optional) user-defiend transcriptional gene set
 
 ## Results
 1. Ranking plot of relevance scores for annotated transcription programs
-2. Data manifold derived from a specific transcription program
+2. Data manifold derived from a specific transcriptional program
 3. Heatmap of a specific transcriptional program
 
 ## Usage
@@ -26,9 +26,9 @@ See our manuscript and [tutorial](https://github.com/lkmklsmn/TFscoring/blob/mas
 	C3_mouse =get_anno(filename="C3.gmt",transfer=True)
 ### Run enrich_test
 	import DrivAER as dv
-	res = dv.enrich_test(count = your_count, pheno = your_pt, tf_targets = C3_mouse, min_targets=5, datatype = "continuous")
+	res = dv.calc_relevance(count = your_count, pheno = your_pt, tf_targets = C3_mouse, min_targets=5, datatype = "continuous")
 ### Get output plot
 	dv.rank_plot(res, save)
-	dv.enrich_plot_tf(result, tf_name, pheno, datatype, save)
-	dv.enrich_plot_marker(result, count, tf_name, gene, save)
+	dv.embedding_plot(result, tf_name, pheno, datatype, save)
+	dv.gene_plot(result, count, tf_name, gene, save)
 	dv.heatmap(result, tf_name, save)
