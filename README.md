@@ -14,9 +14,9 @@ See our manuscript and [tutorial](https://github.com/lkmklsmn/TFscoring/blob/mas
 3. gene set annotation
 
 ## Results
-1. Ranking plot of relevance scores for annotated transcription programs
-2. Data manifold derived from a specific transcriptional program
-3. Heatmap of a specific transcriptional program
+1. Relevance scores for each annotated transcriptional program
+2. Data manifolds derived from each transcriptional program
+3. Various visualizations (heatmap, DCA embedding, barplots)
 
 ## Usage
 
