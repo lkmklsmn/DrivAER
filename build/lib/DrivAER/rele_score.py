@@ -2,6 +2,7 @@ import scanpy as sc
 import pandas as pd
 import os
 import anndata as ad
+import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.ensemble import RandomForestRegressor as RFR
@@ -25,8 +26,15 @@ def calc_relevance(pheno, tf_targets, count, min_targets, datatype):
         my_counter += 1
         print(f'{my_counter} / {len(targets)}')
 
+        tmp = count[:,]
+        tmp = ad.AnnData(tmp.X + 1)
+        sc.pp.normalize_per_cell(tmp)
+        size_factors = tmp.obs.n_counts/np.median(tmp.obs.n_counts)
+
         tmp = count[:,v]
         tmp = ad.AnnData(tmp.X + 1)
+        tmp.obs["size_factors"]=size_factors
+
         sc.external.pp.dca(tmp, mode = "latent", ae_type = "nb-conddisp",
                        early_stop=3, hidden_size=(8, 2, 8), verbose=False)
         return(tmp.obsm["X_dca"])
