@@ -1,3 +1,5 @@
+from dca.api import dca
+import tensorflow
 import scanpy as sc
 import pandas as pd
 import os
@@ -13,7 +15,9 @@ from sklearn.preprocessing import StandardScaler
 my_counter = 0
 path = os.path.dirname(os.path.abspath(__file__))
 
-def calc_relevance(pheno, tf_targets, count, min_targets, datatype):
+def calc_relevance(count, pheno, datatype, tf_targets, min_targets,
+                   ae_type="nb-conddisp", epochs=3, early_stop=3,
+                   hidden_size=(8, 2, 8), verbose=False):
     gene = count.var_names.tolist()
     # Restrict to expressed target genes
     tf_targets = tf_targets.map(lambda x: sorted(list(set(x) & set(gene))))
@@ -35,8 +39,8 @@ def calc_relevance(pheno, tf_targets, count, min_targets, datatype):
         tmp = ad.AnnData(tmp.X + 1)
         tmp.obs["size_factors"]=size_factors
 
-        sc.external.pp.dca(tmp, mode = "latent", ae_type = "nb-conddisp",
-                       early_stop=3, hidden_size=(8, 2, 8), verbose=False)
+        dca(tmp, mode = 'latent', ae_type = ae_type, epochs=epochs,
+                       early_stop=early_stop, hidden_size=hidden_size, verbose=verbose)
         return(tmp.obsm["X_dca"])
     embed = targets.map(fun_dca)
 
@@ -50,10 +54,10 @@ def calc_relevance(pheno, tf_targets, count, min_targets, datatype):
         rf_fit = clf.fit(X = x, y= pd.factorize(pheno)[0])
         return rf_fit.oob_score_
     if datatype == "continuous":
-        enrich_score = embed.map(fun_rfr)
+        rele_score = embed.map(fun_rfr)
     if datatype == "categorical":
-        enrich_score = embed.map(fun_rfc)
-    return embed,enrich_score
+        rele_score = embed.map(fun_rfc)
+    return embed,rele_score
 
 def rank_plot(result,save):
     score = pd.DataFrame(list(result[1].items()), columns=['Signature', 'Relevance Score'])
