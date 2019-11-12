@@ -102,7 +102,9 @@ def gene_plot(result, tf_name, gene, count, save):
     plt.xlabel("dca1",fontsize=30)
     plt.ylabel("dca2",fontsize=30)
     sc.pp.scale(count)
-    plt.scatter(embedding[:, 0], embedding[:, 1],c = count[:,gene].X)
+    expr = count[:,gene].X
+    expr[expr > 2] = 2
+    plt.scatter(embedding[:, 0], embedding[:, 1],c = expr)
     cbar = plt.colorbar()
     cbar.set_label("expression", labelpad=+1)
     fig = plt.gcf()
