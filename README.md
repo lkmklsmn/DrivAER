@@ -21,9 +21,20 @@ See our manuscript and [tutorial](https://github.com/lkmklsmn/TFscoring/blob/mas
 ## Usage
 
 ### Load annotation 
-#### for annotations in gmt format
+#### for gene set annotations in gmt format
+| Set | Source | Target1 | Tatget2 | Target3|
+| ---------- | ---------- |  :----:  |  :----:  |  :----:  | 
+| set1 | source | gene1 | gene2 | gene3 |
+| set2 | source | gene1 | gene2 | gene3 |
+| set3 | source | gene1 | gene2 | gene3 |
 	C3_mouse = get_anno(filename="C3.gmt",filetype="gmt",,conv_mouse=True)
-#### for TF-target pairs in tsv format
+#### for get set pairs in tsv format
+| Set | Target | Type | Source|
+| ---------- | ---------- |  :----:  |  :----:  | 
+| set1 | gene1 | XX | XX |
+| set1 | gene2 | XX | XX |
+| set1 | gene3 | XX | XX |
+| set2 | gene1 | XX | XX |
 	trrust_human = get_anno(filename="trrust_human.tsv",filetype="tsv",conv_mouse=False)
 ### Calculate relevance scores
 	import DrivAER as dv
