@@ -21,7 +21,10 @@ See our manuscript and [tutorial](https://github.com/lkmklsmn/TFscoring/blob/mas
 ## Usage
 
 ### Load annotation 
-	C3_mouse =get_anno(filename="C3.gmt",transfer=True)
+#### for annotations in gmt format
+	C3_mouse = get_anno(filename="C3.gmt",filetype="gmt",,conv_mouse=True)
+#### for TF-target pairs in tsv format
+	trrust_human = get_anno(filename="trrust_human.tsv",filetype="tsv",conv_mouse=False)
 ### Calculate relevance scores
 	import DrivAER as dv
 	res = dv.calc_relevance(count = your_count, pheno = your_pt, tf_targets = C3_mouse, min_targets=5, datatype = "continuous")
