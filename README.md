@@ -10,8 +10,8 @@ See our manuscript and [tutorial](https://github.com/lkmklsmn/TFscoring/blob/mas
 
 ## Input
 1. raw count matrix
-2. outcome of interest (pseudotemporal ordering/cell grouping)
-3. (optional) user-defiend transcriptional gene set
+2. outcome of interest (pseudotemporal ordering/cell grouping etc)
+3. gene set annotation
 
 ## Results
 1. Ranking plot of relevance scores for annotated transcription programs
@@ -19,15 +19,13 @@ See our manuscript and [tutorial](https://github.com/lkmklsmn/TFscoring/blob/mas
 3. Heatmap of a specific transcriptional program
 
 ## Usage
-### Load raw count matrix and phenotype
-	your_count
-	your_pt
-### Load target gene set 
+
+### Load annotation 
 	C3_mouse =get_anno(filename="C3.gmt",transfer=True)
-### Run enrich_test
+### Calculate relevance scores
 	import DrivAER as dv
 	res = dv.calc_relevance(count = your_count, pheno = your_pt, tf_targets = C3_mouse, min_targets=5, datatype = "continuous")
-### Get output plot
+### Generate visualizations
 	dv.rank_plot(res, save)
 	dv.embedding_plot(result, tf_name, pheno, datatype, save)
 	dv.gene_plot(result, count, tf_name, gene, save)
