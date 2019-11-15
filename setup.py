@@ -10,5 +10,5 @@ setuptools.setup(
     install_requires=['sklearn','scanpy','anndata',
                       'pandas','seaborn','matplotlib','dca','tensorflow'
                       ],
-    package_data={'DrivAER': ['data/*.txt','annotations/*.gmt']}
+    package_data={'DrivAER': ['data/*.txt','annotations/*.gmt','annotations/*.tsv']}
 )
