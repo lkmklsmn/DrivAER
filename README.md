@@ -38,7 +38,8 @@ See our manuscript and [tutorial](https://github.com/lkmklsmn/TFscoring/blob/mas
 	trrust_human = get_anno(filename="trrust_human.tsv",filetype="tsv",conv_mouse=False)
 ### Calculate relevance scores
 	import DrivAER as dv
-	res = dv.calc_relevance(count = your_count, pheno = your_pt, tf_targets = C3_mouse, min_targets=5, datatype = "continuous")
+	res = dv.calc_relevance(count = your_count, pheno = your_pt, datatype = "continuous", tf_targets = C3_mouse, min_targets=5,
+                   ae_type="nb-conddisp", epochs=3, early_stop=3, hidden_size=(8, 2, 8), verbose=False)
 ### Generate visualizations
 	dv.rank_plot(res, save)
 	dv.embedding_plot(result, tf_name, pheno, datatype, save)
