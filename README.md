@@ -20,15 +20,16 @@ See our manuscript and [tutorial](https://github.com/lkmklsmn/TFscoring/blob/mas
 
 ## Usage
 
-### Load annotation 
-#### for gene set annotations in gmt format
+### Annotations
+DrivAER provides a number of annotations by default. Users can add annotations using the following format:
+#### Gene set annotations in gmt format
 | Set | Source | Target1 | Tatget2 | Target3|
 | ---------- | ---------- |  :----:  |  :----:  |  :----:  | 
 | set1 | source | gene1 | gene2 | gene3 |
 | set2 | source | gene1 | gene2 | gene3 |
 | set3 | source | gene1 | gene2 | gene3 |
-	C3_mouse = get_anno(filename="C3.gmt",filetype="gmt",,conv_mouse=True)
-#### for get set pairs in tsv format
+	C3_mouse = get_anno(filename="C3.gmt",filetype="gmt",conv_mouse=True)
+#### Transcription factor - target pairs in tsv format
 | Set | Target | Type | Source|
 | ---------- | ---------- |  :----:  |  :----:  | 
 | set1 | gene1 | XX | XX |

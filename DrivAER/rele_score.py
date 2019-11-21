@@ -12,7 +12,7 @@ from sklearn.ensemble import RandomForestClassifier as RFC
 from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 
-my_counter = 0
+
 path = os.path.dirname(os.path.abspath(__file__))
 
 def calc_relevance(count, pheno, datatype, tf_targets, min_targets,
@@ -23,13 +23,12 @@ def calc_relevance(count, pheno, datatype, tf_targets, min_targets,
     tf_targets = tf_targets.map(lambda x: sorted(list(set(x) & set(gene))))
     # Restrict to TFs with at least min_targets genes
     targets =  tf_targets[tf_targets.map(lambda x: len(x) >= min_targets)]
-    # print(targets)
+
+    my_counter = [0]
 
     def fun_dca(v):
-        global my_counter
-        my_counter += 1
-        print(f'{my_counter} / {len(targets)}')
-
+        my_counter[0] += 1
+        print(f'{my_counter[0]} / {len(targets)}')
         tmp = count[:,]
         tmp = ad.AnnData(tmp.X + 1)
         sc.pp.normalize_per_cell(tmp)
@@ -42,6 +41,7 @@ def calc_relevance(count, pheno, datatype, tf_targets, min_targets,
         dca(tmp, mode = 'latent', ae_type = ae_type, epochs=epochs,
                        early_stop=early_stop, hidden_size=hidden_size, verbose=verbose)
         return(tmp.obsm["X_dca"])
+
     embed = targets.map(fun_dca)
 
     # Random forest
