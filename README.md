@@ -28,7 +28,7 @@ DrivAER provides a number of annotations by default. Users can add annotations u
 | set1 | source | gene1 | gene2 | gene3 |
 | set2 | source | gene1 | gene2 | gene3 |
 | set3 | source | gene1 | gene2 | gene3 |
-	C3_mouse = get_anno(filename="C3.gmt",filetype="gmt",,conv_mouse=True)
+	C3_mouse = get_anno(filename="C3.gmt",filetype="gmt",conv_mouse=True)
 #### Transcription factor - target pairs in tsv format
 | Set | Target | Type | Source|
 | ---------- | ---------- |  :----:  |  :----:  | 
