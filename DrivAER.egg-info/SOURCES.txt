@@ -2,6 +2,7 @@ README.md
 setup.py
 DrivAER/__init__.py
 DrivAER/anno.py
+DrivAER/dca_drivaer.py
 DrivAER/rele_score.py
 DrivAER/test.py
 DrivAER.egg-info/PKG-INFO
