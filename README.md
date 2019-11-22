@@ -4,6 +4,10 @@ It infers relevance scores for transcriptional programs with respect to specifie
 
 See our manuscript and [tutorial](https://github.com/lkmklsmn/TFscoring/blob/master/DrivAER_Tutorial.ipynb) for more details.
 
+<p align="center"> 
+<img src="Figure1.PNG">
+</p>
+
 ## Installation
 ### pip
 	pip install -i https://test.pypi.org/simple/ DrivAER==0.0.1
