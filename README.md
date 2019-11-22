@@ -7,6 +7,8 @@ See our manuscript and [tutorial](https://github.com/lkmklsmn/TFscoring/blob/mas
 <p align="center"> 
 <img src="Figure1.PNG">
 </p>
+**Workflow of DrivAER.** (a) DrivAER iteratively subjects annotated gene sets to unsupervised dimension reduction via DCA. (b) For each gene set the generated two-dimensional data manifold coordinates are used as (c) input features in a random forest model to predict the outcome of interest (i.e. pseudotemporal ordering). (d) The random forest prediction accuracy represents the relevance score. 
+
 
 ## Installation
 ### pip
