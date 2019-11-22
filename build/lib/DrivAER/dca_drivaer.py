@@ -2,6 +2,7 @@ import os, tempfile, shutil, random
 import anndata
 import numpy as np
 import scanpy as sc
+import scipy as sp
 
 try:
     import tensorflow as tf
@@ -11,14 +12,45 @@ except ImportError:
                       ' it.')
 
 
-from dca.io import read_dataset
+#from dca.io import read_dataset
 from dca.train import train
 from dca.network import AE_types
 
+def read_dataset(adata, transpose=False, test_split=False, copy=False):
+
+    if isinstance(adata, sc.AnnData):
+        if copy:
+            adata = adata.copy()
+    elif isinstance(adata, str):
+        adata = sc.read(adata, first_column_names=True)
+    else:
+        raise NotImplementedError
+
+    # check if observations are unnormalized using first 10
+    X_subset = adata.X[:10]
+    norm_error = 'Make sure that the dataset (adata.X) contains unnormalized count data.'
+    if sp.sparse.issparse(X_subset):
+        assert (X_subset.astype(int) != X_subset).nnz == 0, norm_error
+    else:
+        assert np.all(X_subset.astype(int) == X_subset), norm_error
+
+    if transpose: adata = adata.transpose()
+
+    if test_split:
+        train_idx, test_idx = train_test_split(np.arange(adata.n_obs), test_size=0.1, random_state=42)
+        spl = pd.Series(['train'] * adata.n_obs)
+        spl.iloc[test_idx] = 'test'
+        adata.obs['dca_split'] = spl.values
+    else:
+        adata.obs['dca_split'] = 'train'
+
+        adata.obs['dca_split'] = adata.obs['dca_split'].astype('category')
+        #print('dca: Successfully preprocessed {} genes and {} cells.'.format(adata.n_vars, adata.n_obs))
+        return adata
+
 
 def dca_drivaer(adata,
-        genes,
-        mode='denoise',
+        mode='latent',
         ae_type='zinb-conddisp',
         normalize_per_cell=True,
         scale=True,
@@ -145,27 +177,26 @@ def dca_drivaer(adata,
                         transpose=False,
                         test_split=False,
                         copy=copy)
-
     # check for zero genes
-    sc.pp.filter_genes(adata, min_counts=1)
     nonzero_genes, _ = sc.pp.filter_genes(adata.X, min_counts=1)
     assert nonzero_genes.all(), 'Please remove all-zero genes before using DCA.'
 
-    def normalize(adata, genes, filter_min_counts=True, size_factors=True, normalize_input=True, logtrans_input=True):
-        genes = list(set(adata.var_names).intersection(set(genes)))
+    def normalize_drivaer(adata, filter_min_counts=True, size_factors=True, normalize_input=True, logtrans_input=True):
 
+        #genes = list(set(adata.var_names).intersection(set(genes)))
         if filter_min_counts:
             sc.pp.filter_genes(adata, min_counts=1)
             sc.pp.filter_cells(adata, min_counts=1)
 
         if size_factors or normalize_input or logtrans_input:
-            adata.raw = adata[:,genes].copy()
+            adata.raw = adata.copy()
         else:
-            adata.raw = adata[:,genes]
+            adata.raw = adata
 
         if size_factors:
             sc.pp.normalize_per_cell(adata)
-            adata.obs['size_factors'] = adata.obs.n_counts / np.median(adata.obs.n_counts)
+            if not "size_factors" in adata.obs_keys():
+                adata.obs['size_factors'] = adata.obs.n_counts / np.median(adata.obs.n_counts)
         else:
             adata.obs['size_factors'] = 1.0
 
@@ -175,13 +206,11 @@ def dca_drivaer(adata,
         if normalize_input:
             sc.pp.scale(adata)
 
-        adata=adata[:, genes]
-        #adata.raw=adata.raw[:, genes]
+        print('dca: Successfully preprocessed {} genes and {} cells.'.format(adata.n_vars, adata.n_obs))
 
         return adata
 
-    adata = normalize(adata,
-                    genes = genes,
+    adata = normalize_drivaer(adata,
                     filter_min_counts=False, # no filtering, keep cell and gene idxs same
                     size_factors=normalize_per_cell,
                     normalize_input=scale,

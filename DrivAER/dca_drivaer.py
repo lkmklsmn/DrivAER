@@ -2,6 +2,7 @@ import os, tempfile, shutil, random
 import anndata
 import numpy as np
 import scanpy as sc
+import scipy as sp
 
 try:
     import tensorflow as tf
@@ -49,7 +50,6 @@ def read_dataset(adata, transpose=False, test_split=False, copy=False):
 
 
 def dca_drivaer(adata,
-        genes,
         mode='latent',
         ae_type='zinb-conddisp',
         normalize_per_cell=True,
@@ -181,7 +181,7 @@ def dca_drivaer(adata,
     nonzero_genes, _ = sc.pp.filter_genes(adata.X, min_counts=1)
     assert nonzero_genes.all(), 'Please remove all-zero genes before using DCA.'
 
-    def normalize_drivaer(adata, genes, filter_min_counts=True, size_factors=True, normalize_input=True, logtrans_input=True):
+    def normalize_drivaer(adata, filter_min_counts=True, size_factors=True, normalize_input=True, logtrans_input=True):
 
         #genes = list(set(adata.var_names).intersection(set(genes)))
         if filter_min_counts:
@@ -189,13 +189,13 @@ def dca_drivaer(adata,
             sc.pp.filter_cells(adata, min_counts=1)
 
         if size_factors or normalize_input or logtrans_input:
-            adata.raw = adata[:,genes].copy()
+            adata.raw = adata.copy()
         else:
-            adata.raw = adata[:,genes]
+            adata.raw = adata
 
         if size_factors:
             sc.pp.normalize_per_cell(adata)
-            if not "size_factors" in adata.obs_keys:
+            if not "size_factors" in adata.obs_keys():
                 adata.obs['size_factors'] = adata.obs.n_counts / np.median(adata.obs.n_counts)
         else:
             adata.obs['size_factors'] = 1.0
@@ -206,14 +206,11 @@ def dca_drivaer(adata,
         if normalize_input:
             sc.pp.scale(adata)
 
-        adata=adata[:, genes]
-        #adata.raw=adata.raw[:, genes]
         print('dca: Successfully preprocessed {} genes and {} cells.'.format(adata.n_vars, adata.n_obs))
 
         return adata
 
     adata = normalize_drivaer(adata,
-                    genes = genes,
                     filter_min_counts=False, # no filtering, keep cell and gene idxs same
                     size_factors=normalize_per_cell,
                     normalize_input=scale,

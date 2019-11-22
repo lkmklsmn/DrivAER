@@ -4,7 +4,7 @@ DrivAER/__init__.py
 DrivAER/anno.py
 DrivAER/dca_drivaer.py
 DrivAER/rele_score.py
-DrivAER/test.py
+DrivAER/visualizations.py
 DrivAER.egg-info/PKG-INFO
 DrivAER.egg-info/SOURCES.txt
 DrivAER.egg-info/dependency_links.txt
@@ -12,5 +12,7 @@ DrivAER.egg-info/requires.txt
 DrivAER.egg-info/top_level.txt
 DrivAER/annotations/C3.gmt
 DrivAER/annotations/hallmark.gmt
+DrivAER/annotations/trrust_human.tsv
+DrivAER/annotations/trrust_mouse.tsv
 DrivAER/data/Paul_Ery.txt
 DrivAER/data/Paul_Mono.txt
