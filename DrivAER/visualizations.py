@@ -68,3 +68,58 @@ def heatmap():
     plot(0)
     """
     ro.r(str)
+
+def heatmap_pt(gene_set,tf_name,count, pseudo):
+    targets = gene_set[tf_name]
+    targets = list(set(targets) & set(count.var_names))
+    c_o = count[:,targets]
+    c = pd.DataFrame(c_o.X, columns=targets, index = count.obs.index.tolist())
+    c['pseudotime'] = pseudo.values
+    c = c.sort_values(by=['pseudotime'])
+    # loess_fit
+    def loess_fit(x):
+        fit = sm.nonparametric.lowess(x.values, c['pseudotime'].values, frac=.6,it=0,is_sorted=True)[:,1]
+        return (fit-fit.mean())/fit.std()
+    fitted = c.apply(loess_fit, axis=0).drop('pseudotime',axis=1).T
+    # time
+    t = pseudo.sort_values(ascending=True)
+    t = pd.DataFrame({'Pseudotime':t.values}).transpose()
+    # TF dca coordinates
+    coord = pd.DataFrame(result[0][tf_name],columns=['dca1','dca2'])
+    coord['pseudotime'] = pseudo.values
+    coord = coord.sort_values(by=['pseudotime']).transpose()
+    coord = coord.drop('pseudotime',axis=0)
+    # heatmap
+    fig = plt.figure(figsize = (20,15))
+    ax1 = plt.subplot2grid((20,20), (0,0), colspan=19, rowspan=1)
+    ax1.set_title(tf_name)
+    ax2 = plt.subplot2grid((20,20), (1,0), colspan=19, rowspan=2)
+    ax3 = plt.subplot2grid((20,20), (3,0), colspan=19, rowspan=18)
+    sns.heatmap(t,ax=ax1,xticklabels=False,cmap="rocket_r")
+    sns.heatmap(coord,ax=ax2,xticklabels=False,cmap="rocket_r")
+    ax1.set_yticklabels(labels=['pseudotime'],rotation=0)
+    ax2.set_yticklabels(labels=['TF_dca'],rotation=0)
+    sns.heatmap(fitted, ax=ax3, cmap="YlGnBu",xticklabels=False)
+    
+def heatmap_group(gene_set,tf_name,count,group,result):
+    targets = gene_set[tf_name]
+    targets = list(set(targets) & set(count.var_names))
+    c_o = count[:,targets]
+    c = pd.DataFrame(c_o.X, columns=targets, index = count.obs.index.tolist()).T
+    fit = c.apply(lambda x:(x-x.mean())/x.std(),axis=1)              
+    # time
+    t = pd.DataFrame({'Cluster':pd.factorize(group)[0]}).transpose()
+    # TF dca coordinates
+    tmp = result[0][tf_name]
+    coord = pd.DataFrame(tmp,columns=['dca1','dca2']).transpose()
+    # heatmap
+    fig = plt.figure(figsize = (20,15))
+    ax1 = plt.subplot2grid((20,20), (0,0), colspan=19, rowspan=1)
+    ax1.set_title(tf_name)
+    ax2 = plt.subplot2grid((20,20), (1,0), colspan=19, rowspan=2)
+    ax3 = plt.subplot2grid((20,20), (3,0), colspan=19, rowspan=18)
+    sns.heatmap(t,ax=ax1,xticklabels=False,cmap="rocket_r")
+    sns.heatmap(coord,ax=ax2,xticklabels=False,cmap="rocket_r")
+    ax1.set_yticklabels(labels=['Cluster'],rotation=0)
+    ax2.set_yticklabels(labels=['TF_dca'],rotation=0)
+    sns.heatmap(fit, ax=ax3, cmap="YlGnBu",xticklabels=False,vmax=2)#,col_cluster=False)
