@@ -12,7 +12,7 @@ See our manuscript (Jupyter notebook to reproduce figures can be found in the Re
 
 
 ## Installation
-### pip
+### Via pip
 	pip install -i https://test.pypi.org/simple/ DrivAER==0.0.1
 
 ## Input
