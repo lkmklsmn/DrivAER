@@ -1,4 +1,4 @@
-# DrivAER for manifold interpretation of scRNA-seq data
+# DrivAER for manifold interpretation in scRNA-seq data
 **DrivAER** is a method for identification of **Driv**ing transcriptional programs based on **A**uto**E**ncoder derived **R**elevance scores. 
 DrivAER infers relevance scores for transcriptional programs with respect to specified outcomes of interest in single-cell RNA sequencing data, such as psuedotemporal ordering or disease status..
 
