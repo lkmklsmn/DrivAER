@@ -9,6 +9,9 @@ def get_anno(filename,filetype,conv_mouse):
                          names=[i for i in range(2000)], low_memory=False)
         if filename == "C3.gmt":
             df = df[-df[0].str.contains("UNKNOWN")].set_index(0)
+        elif filename == "hallmark.gmt":
+            df[0] = df[0].map(lambda x:x[9:])
+            df = df.set_index(0)
         else:
             df = df.set_index(0)
         if conv_mouse:
@@ -23,5 +26,3 @@ def get_anno(filename,filetype,conv_mouse):
             df['Target'] = df['Target'].map(lambda x:x[0] + x[1:].lower())
         df = df.groupby("TF")['Target'].unique()
         return(df)
-
-
