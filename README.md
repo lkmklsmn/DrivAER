@@ -30,21 +30,21 @@ See our manuscript and [tutorial](https://github.com/lkmklsmn/TFscoring/blob/mas
 ### Annotations
 DrivAER provides a number of annotations by default. Users can add annotations using the following format:
 #### Gene set annotations in gmt format
-| Set | Source | Target1 | Tatget2 | Target3|
+| Gene set | Source | Gene1 | Gene2 | Gene3|
 | ---------- | ---------- |  :----:  |  :----:  |  :----:  | 
 | set1 | source | gene1 | gene2 | gene3 |
 | set2 | source | gene1 | gene2 | gene3 |
 | set3 | source | gene1 | gene2 | gene3 |
 	import DrivAER as dv
-	C3_mouse = dv.get_anno(filename="C3.gmt",filetype="gmt",conv_mouse=True)
+	C3_mouse = dv.get_anno(filename = "C3.gmt", filetype = "gmt", conv_mouse = True)
 #### Transcription factor - target pairs in tsv format
-| Set | Target | Type | Source|
+| Transcription factor | Target | Type | Source|
 | ---------- | ---------- |  :----:  |  :----:  | 
 | set1 | gene1 | XX | XX |
 | set1 | gene2 | XX | XX |
 | set1 | gene3 | XX | XX |
 | set2 | gene1 | XX | XX |
-	trrust_human = dv.get_anno(filename="trrust_human.tsv",filetype="tsv",conv_mouse=False)
+	trrust_human = dv.get_anno(filename = "trrust_human.tsv", filetype = "tsv", conv_mouse = False)
 ### Calculate relevance scores
 	res = dv.calc_relevance(count = your_count, pheno = your_pt, datatype = "continuous", tf_targets = C3_mouse, min_targets=5,
                    ae_type="nb-conddisp", epochs=3, early_stop=3, hidden_size=(8, 2, 8), verbose=False)
