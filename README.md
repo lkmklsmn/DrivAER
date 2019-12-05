@@ -16,9 +16,9 @@ See our manuscript and [tutorial](https://github.com/lkmklsmn/TFscoring/blob/mas
 	pip install -i https://test.pypi.org/simple/ DrivAER==0.0.1
 
 ## Input
-1. raw count matrix
-2. outcome of interest (pseudotemporal ordering/cell grouping etc)
-3. gene set annotation
+1. Raw count expression matrix
+2. Outcome of interest (pseudotemporal ordering/cell grouping etc)
+3. Gene set annotation
 
 ## Results
 1. Relevance scores for each annotated transcriptional program
@@ -52,4 +52,3 @@ DrivAER provides a number of annotations by default. Users can add annotations u
 	dv.rank_plot(res, save)
 	dv.embedding_plot(result, tf_name, pheno, datatype, save)
 	dv.gene_plot(result, count, tf_name, gene, save)
-	dv.heatmap(result, tf_name, save)
