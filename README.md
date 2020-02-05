@@ -11,9 +11,8 @@ See our manuscript (Jupyter notebook to reproduce figures can be found in the Re
 **Workflow** (a) DrivAER iteratively subjects annotated gene sets to unsupervised dimension reduction via DCA. (b) For each gene set the generated two-dimensional data manifold coordinates are used as (c) input features in a random forest model to predict the outcome of interest (i.e. pseudotemporal ordering). (d) The random forest prediction accuracy represents the relevance score. 
 
 ## Check out our live, interactive tutorial (hosted by Google colab)
-(Blood development)[https://colab.research.google.com/github/lkmklsmn/DrivAER/blob/master/Tutorial/DrivAER%20-%20blood%20development]
-
-
+[Blood development](https://colab.research.google.com/github/lkmklsmn/DrivAER/blob/master/Tutorial/DrivAER%20-%20blood%20development)
+[Interferon stimulation](https://colab.research.google.com/github/lkmklsmn/DrivAER/blob/master/Tutorial/DrivAER%20-%20interferon%20stimulation)
 
 ## Installation
 ### Via pip
