@@ -2,7 +2,7 @@
 **DrivAER** is a method for identification of **Driv**ing transcriptional programs based on **A**uto**E**ncoder derived **R**elevance scores. 
 DrivAER infers relevance scores for transcriptional programs with respect to specified outcomes of interest in single-cell RNA sequencing data, such as psuedotemporal ordering or disease status..
 
-See our manuscript (Jupyter notebook to reproduce figures can be found in the Reproducibiliy folder) and [tutorial](https://github.com/lkmklsmn/TFscoring/blob/master/DrivAER_Tutorial.ipynb) for more details.
+See our preprint (https://www.biorxiv.org/content/10.1101/864165v1) for more details.
 
 <p align="center"> 
 <img src="Figure1.PNG">
@@ -10,9 +10,10 @@ See our manuscript (Jupyter notebook to reproduce figures can be found in the Re
 
 **Workflow** (a) DrivAER iteratively subjects annotated gene sets to unsupervised dimension reduction via DCA. (b) For each gene set the generated two-dimensional data manifold coordinates are used as (c) input features in a random forest model to predict the outcome of interest (i.e. pseudotemporal ordering). (d) The random forest prediction accuracy represents the relevance score. 
 
-## Check out our live, interactive tutorial (hosted by Google colab)
-[Blood development](https://colab.research.google.com/github/lkmklsmn/DrivAER/blob/master/Tutorial/DrivAER%20-%20blood%20development)
-[Interferon stimulation](https://colab.research.google.com/github/lkmklsmn/DrivAER/blob/master/Tutorial/DrivAER%20-%20interferon%20stimulation)
+## Check out our live, interactive tutorial!
+These [Google colab](https://colab.research.google.com/) notebooks allow you to interactively explore DrivAER. We have prepared two analysis examples:
+1. [Blood development](https://colab.research.google.com/github/lkmklsmn/DrivAER/blob/master/Tutorial/DrivAER%20-%20blood%20development)
+2. [Interferon stimulation](https://colab.research.google.com/github/lkmklsmn/DrivAER/blob/master/Tutorial/DrivAER%20-%20interferon%20stimulation)
 
 ## Installation
 ### Via pip
