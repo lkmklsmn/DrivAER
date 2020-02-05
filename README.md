@@ -2,7 +2,7 @@
 **DrivAER** is a method for identification of **Driv**ing transcriptional programs based on **A**uto**E**ncoder derived **R**elevance scores. 
 DrivAER infers relevance scores for transcriptional programs with respect to specified outcomes of interest in single-cell RNA sequencing data, such as psuedotemporal ordering or disease status..
 
-See our preprint (https://www.biorxiv.org/content/10.1101/864165v1) for more details.
+See our [preprint](https://www.biorxiv.org/content/10.1101/864165v1) for more details.
 
 <p align="center"> 
 <img src="Figure1.PNG">
