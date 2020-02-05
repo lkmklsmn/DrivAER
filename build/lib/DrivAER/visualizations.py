@@ -4,6 +4,8 @@ import pandas as pd
 import numbers
 import scanpy as sc
 import rpy2.robjects as ro
+import statsmodels.api as sm
+from dca.api import dca
 
 def rank_plot(result, save = False):
     score = pd.DataFrame(list(result[1].items()), columns=['Signature', 'Relevance Score'])
@@ -46,25 +48,26 @@ def embedding_plot(result, tf_name, pheno, save = False):
     if save:
         fig.savefig(path + tf_name + '.svg', bbox_inches='tight')
 
-def gene_plot(result, tf_name, gene, count, save = False):
-    embedding = result[0][tf_name]
+def gene_plot(result,tf_name,gene,count,pheno,save = False):
+    em = pd.DataFrame(result[0][tf_name],columns=['dca1','dca2'])
     plt.figure(figsize=(10,8))
+    if isinstance(pheno[0], numbers.Number):
+        sc.pp.scale(count)
+        expr = count[:,gene].X
+        expr[expr > 2] = 2
+        plt.scatter(em['dca1'], em['dca2'],c = expr)
+        cbar = plt.colorbar()
+        cbar.set_label("expression", labelpad=+1)
+    else:
+        em = em.set_index(count.obs.index)
+        em['Value'] = pd.DataFrame(count[:,gene].X).values
+        plt.figure(figsize=(10,8))
+        cmap = sns.cubehelix_palette(dark=.2, light=0.9, as_cmap=True)
+        sns.scatterplot(x='dca1', y='dca2', hue="Value",hue_norm=(-2,2),data=em,s=30,palette=cmap)
     plt.title(gene,fontsize=30)
     plt.xlabel("dca1",fontsize=30)
     plt.ylabel("dca2",fontsize=30)
-    sc.pp.scale(count)
-    expr = count[:,gene].X
-    expr[expr > 2] = 2
-    plt.scatter(embedding[:, 0], embedding[:, 1],c = expr)
-    cbar = plt.colorbar()
-    cbar.set_label("expression", labelpad=+1)
     fig = plt.gcf()
     plt.show()
     if save:
         fig.savefig(path + gene + '.svg', bbox_inches='tight')
-
-def heatmap():
-    str="""
-    plot(0)
-    """
-    ro.r(str)
