@@ -32,11 +32,15 @@ def calc_relevance(count, pheno, tf_targets, min_targets,
         print(f'{my_counter[0]} / {len(targets)}')
 
         tmp = count.copy()
+        if(type(tmp) == "scipy.sparse.csr.csr_matrix"):
+          tmp = tmp.toarray()
         tmp = ad.AnnData(tmp.X + 1)
         sc.pp.normalize_per_cell(tmp)
         size_factors = tmp.obs.n_counts/np.median(tmp.obs.n_counts)
 
         tmp = count[:,v]
+        if(type(tmp) == "scipy.sparse.csr.csr_matrix"):
+          tmp = tmp.toarray()
         tmp = ad.AnnData(tmp.X + 1)
         tmp.obs["size_factors"]=size_factors
 
