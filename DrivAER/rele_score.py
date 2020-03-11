@@ -39,7 +39,7 @@ def calc_relevance(count, pheno, tf_targets, min_targets,
         sc.pp.normalize_per_cell(tmp)
         size_factors = tmp.obs.n_counts/np.median(tmp.obs.n_counts)
 
-        tmp = count[:,v]
+        tmp = count[:,v].copy()
         if(scipy.sparse.issparse(tmp.X)):
             tmp.X = tmp.X.toarray()
         tmp = ad.AnnData(tmp.X + 1)
@@ -66,5 +66,5 @@ def calc_relevance(count, pheno, tf_targets, min_targets,
         rele_score = embed.map(fun_rfr)
     else:
         rele_score = embed.map(fun_rfc)
-        
+
     return embed,rele_score
