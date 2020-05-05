@@ -167,9 +167,6 @@ def dca_drivaer(adata,
     assert mode in ('denoise', 'latent'), '%s is not a valid mode.' % mode
 
     # set seed for reproducibility
-    random.seed(random_state)
-    np.random.seed(random_state)
-    tf.set_random_seed(random_state)
     os.environ['PYTHONHASHSEED'] = '0'
 
     # this creates adata.raw with raw counts and copies adata if copy==True
@@ -243,7 +240,7 @@ def dca_drivaer(adata,
     }
 
     hist = train(adata[adata.obs.dca_split == 'train'], net, **training_kwds)
-    res = net.predict(adata, mode, return_info, copy)
+    res = net.predict(adata, mode)#, return_info, copy)
     adata = res if copy else adata
 
     if return_info:

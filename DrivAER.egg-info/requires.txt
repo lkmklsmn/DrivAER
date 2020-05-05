@@ -5,4 +5,4 @@ pandas
 seaborn
 matplotlib
 dca
-tensorflow
+tensorflow<=1.15.2
