@@ -39,15 +39,15 @@ def calc_relevance(count, pheno, tf_targets, min_targets,
         sc.pp.normalize_per_cell(tmp)
         size_factors = tmp.obs.n_counts/np.median(tmp.obs.n_counts)
 
-        tmp = count[:,v].copy()
-        if(scipy.sparse.issparse(tmp.X)):
-            tmp.X = tmp.X.toarray()
-        tmp = ad.AnnData(tmp.X + 1)
-        tmp.obs["size_factors"]=size_factors
+        sub = count[:,v].copy()
+        if(scipy.sparse.issparse(sub.X)):
+            sub.X = sub.X.toarray()
+        sub = ad.AnnData(sub.X + 1)
+        sub.obs["size_factors"]=size_factors
 
-        ret = dca_drivaer(tmp, mode='latent',ae_type=ae_type,epochs=epochs,
-        early_stop=early_stop,hidden_size=hidden_size,verbose=verbose,copy=True)
-        return(ret.obsm["X_dca"])
+        dca_drivaer(sub, mode='latent',ae_type=ae_type,epochs=epochs,
+        early_stop=early_stop,hidden_size=hidden_size,verbose=verbose)
+        return(sub.obsm["X_dca"])
 
     embed = targets.map(fun_dca)
 
