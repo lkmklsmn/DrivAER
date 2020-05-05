@@ -240,7 +240,7 @@ def dca_drivaer(adata,
     }
 
     hist = train(adata[adata.obs.dca_split == 'train'], net, **training_kwds)
-    res = net.predict(adata, mode)#, return_info, copy)
+    res = net.predict(adata, mode, return_info, copy)
     adata = res if copy else adata
 
     if return_info:
