@@ -7,7 +7,7 @@ import rpy2.robjects as ro
 import statsmodels.api as sm
 from dca.api import dca
 
-def rank_plot(result, save = False):
+def rank_plot(result, save=False, path='./'):
     score = pd.DataFrame(list(result[1].items()), columns=['Signature', 'Relevance Score'])
     score = score.sort_values('Relevance Score',ascending=False)
     new_df = score.head(5)
@@ -21,13 +21,13 @@ def rank_plot(result, save = False):
     fig = plt.gcf()
     plt.show()
     if save:
-        fig.savefig(path + '/rank.svg', bbox_inches='tight')
+        fig.savefig(path + 'rank.svg', bbox_inches='tight')
     top_TF = score.head(n=5)['Signature'].tolist()
     print("Top_TF",":",top_TF)
     worse_TF = score.tail(n=5)['Signature'].tolist()
     print("Worse_TF",":",worse_TF)
 
-def embedding_plot(result, tf_name, pheno, save = False):
+def embedding_plot(result, tf_name, pheno, save = False, path='./'):
     em = pd.DataFrame(result[0][tf_name],columns=['dca1','dca2'])
     plt.figure(figsize=(10, 8))
 
@@ -48,7 +48,7 @@ def embedding_plot(result, tf_name, pheno, save = False):
     if save:
         fig.savefig(path + tf_name + '.svg', bbox_inches='tight')
 
-def gene_plot(result,tf_name,gene,count,pheno,save = False):
+def gene_plot(result,tf_name,gene,count,pheno,save = False, path='./'):
     em = pd.DataFrame(result[0][tf_name],columns=['dca1','dca2'])
     plt.figure(figsize=(10,8))
     if isinstance(pheno[0], numbers.Number):

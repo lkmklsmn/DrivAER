@@ -13,8 +13,6 @@ import numbers
 import scipy
 
 
-path = os.path.dirname(os.path.abspath(__file__))
-
 def calc_relevance(count, pheno, tf_targets, min_targets,
                    ae_type="nb-conddisp", epochs=3, early_stop=3,
                    hidden_size=(8, 2, 8), verbose=False):
