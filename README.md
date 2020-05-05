@@ -17,7 +17,7 @@ The following [Google colab](https://colab.research.google.com/) notebooks allow
 
 ## Installation
 ### Via pip
-	pip install -i https://test.pypi.org/simple/ DrivAER==0.0.1
+	pip install git+https://github.com/lkmklsmn/DrivAER.git
 
 ## Input
 1. Raw count expression matrix
