@@ -49,7 +49,7 @@ def calc_relevance(count, pheno, tf_targets, min_targets,
 
     embed = targets.map(fun_dca)
 
-    df_list = [pd.DataFrame(v, columns=[k + '-1', k + '-2']) for k, v in embed.items()]
+    df_list = [pd.DataFrame(v, columns=[str(k) + '-1', str(k) + '-2']) for k, v in embed.items()]
     embed_all = None
     for df in df_list:
         embed_all = df.copy() if embed_all is None else pd.concat([embed_all, df], axis=1)
