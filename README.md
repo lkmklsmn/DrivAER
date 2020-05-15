@@ -16,24 +16,29 @@ The following [Google colab](https://colab.research.google.com/) notebooks allow
 2. [Interferon stimulation](https://colab.research.google.com/github/lkmklsmn/DrivAER/blob/master/Tutorial/DrivAER%20-%20interferon%20stimulation)
 
 ## Installation
-### Via pip
+### via pip
 	pip install git+https://github.com/lkmklsmn/DrivAER.git
+### via git
+	git clone https://github.com/lkmklsmn/DrivAER
+	cd DrivAER
+	python setup.py install
 
 ## Input
 1. Raw count expression matrix
 2. Outcome of interest (pseudotemporal ordering/cell grouping etc)
 3. Gene set annotation
 
-## Results
+## Output
 1. Relevance scores for each annotated transcriptional program
 2. Data manifolds derived from each transcriptional program
 3. Various visualizations (heatmap, DCA embedding, barplots)
 
 ## Usage
 
-### Annotations
-DrivAER provides a number of annotations by default. Users can add annotations using the following format:
-#### Gene set annotations in gmt format
+### Step 1: Get Gene Set Annotations
+DrivAER supports annotations in gmt and csv format, as well as user-defined annotation file.
+#### 1.1 From gmt format
+The gmt format files for Broad's MSigDB can be downloaded from the [Broad Website](https://www.gsea-msigdb.org/gsea/downloads.jsp).
 | Gene set | Source | Gene1 | Gene2 | Gene3|
 | ---------- | ---------- |  :----:  |  :----:  |  :----:  | 
 | set1 | source | gene1 | gene2 | gene3 |
@@ -41,7 +46,8 @@ DrivAER provides a number of annotations by default. Users can add annotations u
 | set3 | source | gene1 | gene2 | gene3 |
 	import DrivAER as dv
 	C3_mouse = dv.get_anno(filename = "C3.gmt", filetype = "gmt", conv_mouse = True)
-#### Transcription factor - target pairs in tsv format
+#### 1.2 From tsv format
+The tsv format files can be downloaded from Trandcription Factor sites, such as [TRRUST](https://www.grnpedia.org/trrust/downloadnetwork.php). DrivAER provides built-in annotations from TRRUST.
 | Transcription factor | Target | Type | Source|
 | ---------- | ---------- |  :----:  |  :----:  | 
 | set1 | gene1 | XX | XX |
@@ -49,10 +55,14 @@ DrivAER provides a number of annotations by default. Users can add annotations u
 | set1 | gene3 | XX | XX |
 | set2 | gene1 | XX | XX |
 	trrust_human = dv.get_anno(filename = "trrust_human.tsv", filetype = "tsv", conv_mouse = False)
-### Calculate relevance scores
-	res = dv.calc_relevance(count = your_count, pheno = your_pt, datatype = "continuous", tf_targets = C3_mouse, min_targets=5,
-                   ae_type="nb-conddisp", epochs=3, early_stop=3, hidden_size=(8, 2, 8), verbose=False)
-### Generate visualizations
-	dv.rank_plot(res, save)
-	dv.embedding_plot(result, tf_name, pheno, datatype, save)
-	dv.gene_plot(result, count, tf_name, gene, save)
+#### 1.3 From user-defined gene set annotations
+Users can create your own gene set annotations. The format is a pandas series. Index are trandcription factor names or gene set names. Each row contains a list of corresponding genes.
+
+### Step 2: Calculate relevance scores
+	res = dv.calc_relevance(count = your_count, pheno = your_pt, tf_targets = C3_mouse, min_targets=5,
+                   ae_type="nb-conddisp", epochs=100, early_stop=3, hidden_size=(8, 2, 8), verbose=False)
+		   
+### Step 3: Generate visualizations
+	dv.rank_plot(result, save, path)
+	dv.embedding_plot(result, tf_name, pheno, datatype, save, path)
+	dv.gene_plot(result, count, tf_name, gene, save, path)
