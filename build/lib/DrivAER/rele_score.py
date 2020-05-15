@@ -49,6 +49,11 @@ def calc_relevance(count, pheno, tf_targets, min_targets,
 
     embed = targets.map(fun_dca)
 
+    df_list = [pd.DataFrame(v, columns=[k + '-1', k + '-2']) for k, v in embed.items()]
+    embed_all = None
+    for df in df_list:
+        embed_all = df.copy() if embed_all is None else pd.concat([embed_all, df], axis=1)
+
     # Random forest
     def fun_rfr(x):
         clf = RFR(n_estimators=500, oob_score = True)
@@ -65,4 +70,4 @@ def calc_relevance(count, pheno, tf_targets, min_targets,
     else:
         rele_score = embed.map(fun_rfc)
 
-    return embed,rele_score
+    return embed, rele_score, embed_all

@@ -35,7 +35,6 @@ DrivAER/data/Paul_Mono.txt
 Reproducibiliy/Figure1.ipynb
 Reproducibiliy/Figure2.ipynb
 Reproducibiliy/Simulation_DrivAER.ipynb
-Reproducibiliy/Simulations/Kang_simulation.R
 Tutorial/DrivAER - blood development
 Tutorial/DrivAER - interferon stimulation
 dist/DrivAER-0.0.1-py3-none-any.whl
