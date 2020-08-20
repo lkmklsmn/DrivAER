@@ -71,3 +71,167 @@ def calc_relevance(count, pheno, tf_targets, min_targets,
         rele_score = embed.map(fun_rfc)
 
     return embed, rele_score, embed_all
+
+
+def calc_relevance_pca(adata, pheno, tf_targets, min_targets):
+
+    gene = adata.var_names.tolist()
+    # Restrict to expressed target genes
+    tf_targets = tf_targets.map(lambda x: sorted(list(set(x) & set(gene))))
+    # Restrict to TFs with at least min_targets genes
+    targets =  tf_targets[tf_targets.map(lambda x: len(x) >= min_targets)]
+
+    my_counter = [0]
+
+    def fun_dca(v):
+        my_counter[0] += 1
+        #print(f'{my_counter[0]} / {len(targets)}')
+
+        tmp = adata[:,v].copy()
+        sc.pp.pca(tmp, n_comps= 2)
+
+        ret = tmp.obsm['X_pca'][:,0:1]
+        return(ret)
+
+    embed = targets.map(fun_dca)
+
+    # Random forest
+    def fun_rfr(x):
+        clf = RFR(n_estimators=500, oob_score = True)
+        rf_fit = clf.fit(X = x, y= pheno)
+        return rf_fit.oob_score_
+
+    def fun_rfc(x):
+        clf = RFC(n_estimators=500, oob_score = True)
+        rf_fit = clf.fit(X = x, y= pd.factorize(pheno)[0])
+        return rf_fit.oob_score_
+
+    if isinstance(pheno[0], numbers.Number):
+        rele_score = embed.map(fun_rfr)
+    else:
+        rele_score = embed.map(fun_rfc)
+
+    return embed,rele_score
+
+
+def calc_relevance_umap(adata, pheno, tf_targets, min_targets):
+
+    gene = adata.var_names.tolist()
+    # Restrict to expressed target genes
+    tf_targets = tf_targets.map(lambda x: sorted(list(set(x) & set(gene))))
+    # Restrict to TFs with at least min_targets genes
+    targets =  tf_targets[tf_targets.map(lambda x: len(x) >= min_targets)]
+
+    my_counter = [0]
+
+    def fun_dca(v):
+        my_counter[0] += 1
+        #print(f'{my_counter[0]} / {len(targets)}')
+
+        tmp = adata[:,v].copy()
+        sc.pp.pca(tmp)
+        sc.pp.neighbors(tmp)
+        sc.tl.umap(tmp)
+
+        ret = tmp.obsm['X_umap']
+        return(ret)
+
+    embed = targets.map(fun_dca)
+
+    # Random forest
+    def fun_rfr(x):
+        clf = RFR(n_estimators=500, oob_score = True)
+        rf_fit = clf.fit(X = x, y= pheno)
+        return rf_fit.oob_score_
+
+    def fun_rfc(x):
+        clf = RFC(n_estimators=500, oob_score = True)
+        rf_fit = clf.fit(X = x, y= pd.factorize(pheno)[0])
+        return rf_fit.oob_score_
+
+    if isinstance(pheno[0], numbers.Number):
+        rele_score = embed.map(fun_rfr)
+    else:
+        rele_score = embed.map(fun_rfc)
+
+    return embed,rele_score
+
+
+def calc_relevance_tsne(adata, pheno, tf_targets, min_targets):
+
+    gene = adata.var_names.tolist()
+    # Restrict to expressed target genes
+    tf_targets = tf_targets.map(lambda x: sorted(list(set(x) & set(gene))))
+    # Restrict to TFs with at least min_targets genes
+    targets =  tf_targets[tf_targets.map(lambda x: len(x) >= min_targets)]
+
+    my_counter = [0]
+
+    def fun_dca(v):
+        my_counter[0] += 1
+        #print(f'{my_counter[0]} / {len(targets)}')
+
+        tmp = adata[:,v].copy()
+        sc.pp.pca(tmp)
+        sc.pp.neighbors(tmp)
+        sc.tl.tsne(tmp)
+
+        ret = tmp.obsm['X_tsne']
+        return(ret)
+
+    embed = targets.map(fun_dca)
+
+    # Random forest
+    def fun_rfr(x):
+        clf = RFR(n_estimators=500, oob_score = True)
+        rf_fit = clf.fit(X = x, y= pheno)
+        return rf_fit.oob_score_
+
+    def fun_rfc(x):
+        clf = RFC(n_estimators=500, oob_score = True)
+        rf_fit = clf.fit(X = x, y= pd.factorize(pheno)[0])
+        return rf_fit.oob_score_
+
+    if isinstance(pheno[0], numbers.Number):
+        rele_score = embed.map(fun_rfr)
+    else:
+        rele_score = embed.map(fun_rfc)
+
+    return embed,rele_score
+
+
+def compare_to_random(count, pheno, geneset,
+                      ae_type = 'nb-conddisp', min_targets = 10, epochs = 50, early_stop = 3,
+                      num_permutations = 10, plot = True):
+
+  res = dv.calc_relevance(count = count,
+                              pheno = pheno,
+                              ae_type = ae_type,
+                              tf_targets = geneset,
+                              min_targets = min_targets,
+                              epochs=epochs,
+                              early_stop = early_stop)
+
+  original_score = res[1][0]
+
+  genesets = []
+  for x in range(0, num_permutations):
+    genesets.append(list(np.random.choice(list(adata.var_names), len(geneset[0]))))
+  random_genesets = pd.Series(genesets)
+
+  random = dv.calc_relevance(count = count,
+                              pheno = pheno,
+                              ae_type = ae_type,
+                              tf_targets = random_genesets,
+                              min_targets = min_targets,
+                              epochs=epochs,
+                              early_stop = early_stop)
+
+  if plot:
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    sns.distplot(list(random[1]), hist=False, rug=True)
+    plt.axvline(original_score, 0, 2,  color = 'red')
+    plt.title('Distribution random genes')
+
+  return original_score, list(random[1])

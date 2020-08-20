@@ -1,4 +1,5 @@
 .DS_Store
+.gitignore
 Figure1.PNG
 LICENSE
 README.md
