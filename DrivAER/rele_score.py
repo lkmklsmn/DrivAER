@@ -216,7 +216,7 @@ def compare_to_random(count, pheno, geneset,
 
   genesets = []
   for x in range(0, num_permutations):
-    genesets.append(list(np.random.choice(list(adata.var_names), len(geneset[0]))))
+    genesets.append(list(np.random.choice(list(count.var_names), len(geneset[0]))))
   random_genesets = pd.Series(genesets)
 
   random = calc_relevance(count = count,
