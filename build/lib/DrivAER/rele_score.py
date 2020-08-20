@@ -204,7 +204,7 @@ def compare_to_random(count, pheno, geneset,
                       ae_type = 'nb-conddisp', min_targets = 10, epochs = 50, early_stop = 3,
                       num_permutations = 10, plot = True):
 
-  res = dv.calc_relevance(count = count,
+  res = calc_relevance(count = count,
                               pheno = pheno,
                               ae_type = ae_type,
                               tf_targets = geneset,
@@ -219,7 +219,7 @@ def compare_to_random(count, pheno, geneset,
     genesets.append(list(np.random.choice(list(adata.var_names), len(geneset[0]))))
   random_genesets = pd.Series(genesets)
 
-  random = dv.calc_relevance(count = count,
+  random = calc_relevance(count = count,
                               pheno = pheno,
                               ae_type = ae_type,
                               tf_targets = random_genesets,
