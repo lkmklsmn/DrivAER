@@ -113,6 +113,7 @@ def calc_relevance_pca(adata, pheno, tf_targets, min_targets):
 
     return embed,rele_score
 
+
 def calc_relevance_umap(adata, pheno, tf_targets, min_targets):
 
     gene = adata.var_names.tolist()
@@ -155,6 +156,7 @@ def calc_relevance_umap(adata, pheno, tf_targets, min_targets):
 
     return embed,rele_score
 
+
 def calc_relevance_tsne(adata, pheno, tf_targets, min_targets):
 
     gene = adata.var_names.tolist()
@@ -196,3 +198,40 @@ def calc_relevance_tsne(adata, pheno, tf_targets, min_targets):
         rele_score = embed.map(fun_rfc)
 
     return embed,rele_score
+
+
+def compare_to_random(count, pheno, geneset,
+                      ae_type = 'nb-conddisp', min_targets = 10, epochs = 50, early_stop = 3,
+                      num_permutations = 10, plot = True):
+
+  res = dv.calc_relevance(count = count,
+                              pheno = pheno,
+                              ae_type = ae_type,
+                              tf_targets = geneset,
+                              min_targets = min_targets,
+                              epochs=epochs,
+                              early_stop = early_stop)
+
+  original_score = res[1][0]
+
+  genesets = []
+  for x in range(0, num_permutations):
+    genesets.append(list(np.random.choice(list(adata.var_names), len(geneset[0]))))
+  random_genesets = pd.Series(genesets)
+
+  random = dv.calc_relevance(count = count,
+                              pheno = pheno,
+                              ae_type = ae_type,
+                              tf_targets = random_genesets,
+                              min_targets = min_targets,
+                              epochs=epochs,
+                              early_stop = early_stop)
+
+  if plot:
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    sns.distplot(list(random[1]), hist=False, rug=True)
+    plt.axvline(original_score, 0, 2,  color = 'red')
+    plt.title('Distribution random genes')
+
+  return original_score, list(random[1])
