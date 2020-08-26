@@ -11,6 +11,8 @@ from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 import numbers
 import scipy
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 def calc_relevance(count, pheno, tf_targets, min_targets,
@@ -196,9 +198,7 @@ def calc_relevance_tsne(adata, pheno, tf_targets, min_targets):
 
 
 def plot_random(original_score, random_scores):
-  import matplotlib.pyplot as plt
-  import seaborn as sns
-
+  
   sns.distplot(random_scores, hist=False, rug=True)
   plt.axvline(original_score, 0, 2,  color = 'red')
   plt.title('Distribution random genes')
