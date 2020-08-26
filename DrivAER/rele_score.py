@@ -195,6 +195,15 @@ def calc_relevance_tsne(adata, pheno, tf_targets, min_targets):
     return embed, rele_score
 
 
+def plot_random(original_score, random_scores):
+  import matplotlib.pyplot as plt
+  import seaborn as sns
+
+  sns.distplot(random_scores, hist=False, rug=True)
+  plt.axvline(original_score, 0, 2,  color = 'red')
+  plt.title('Distribution random genes')
+
+
 def compare_to_random(count, pheno, geneset,
                       ae_type = 'nb-conddisp', min_targets = 10, epochs = 50, early_stop = 3,
                       num_permutations = 10, plot = True):
@@ -223,10 +232,6 @@ def compare_to_random(count, pheno, geneset,
                               early_stop = early_stop)
 
   if plot:
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-    sns.distplot(list(random[1]), hist=False, rug=True)
-    plt.axvline(original_score, 0, 2,  color = 'red')
-    plt.title('Distribution random genes')
+    plot_random(original_score, list(random[1]))
 
   return original_score, list(random[1])
