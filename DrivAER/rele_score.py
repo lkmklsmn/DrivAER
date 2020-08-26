@@ -1,5 +1,5 @@
 from .dca_drivaer import dca_drivaer
-import tensorflow
+import tensorflow as tf
 import scanpy as sc
 import pandas as pd
 import os
@@ -16,7 +16,7 @@ import seaborn as sns
 
 
 def calc_relevance(count, pheno, tf_targets, min_targets,
-                   ae_type="nb-conddisp", epochs=3, early_stop=3,
+                   ae_type="nb-conddisp", epochs=50, early_stop=3,
                    hidden_size=(8, 2, 8), verbose=False):
 
     sc.pp.filter_genes(count, min_counts=1)
@@ -47,6 +47,9 @@ def calc_relevance(count, pheno, tf_targets, min_targets,
 
         dca_drivaer(sub, mode='latent',ae_type=ae_type,epochs=epochs,
         early_stop=early_stop,hidden_size=hidden_size,verbose=verbose)
+
+        tf.keras.backend.clear_session()
+
         return(sub.obsm["X_dca"])
 
     embed = [fun_dca(x) for x in targets]
@@ -198,7 +201,7 @@ def calc_relevance_tsne(adata, pheno, tf_targets, min_targets):
 
 
 def plot_random(original_score, random_scores):
-  
+
   sns.distplot(random_scores, hist=False, rug=True)
   plt.axvline(original_score, 0, 2,  color = 'red')
   plt.title('Distribution random genes')
