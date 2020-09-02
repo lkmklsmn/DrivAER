@@ -1,5 +1,5 @@
 from .dca_drivaer import dca_drivaer
-import tensorflow
+import tensorflow as tf
 import scanpy as sc
 import pandas as pd
 import os
@@ -11,10 +11,12 @@ from sklearn.cluster import DBSCAN
 from sklearn.preprocessing import StandardScaler
 import numbers
 import scipy
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 
 def calc_relevance(count, pheno, tf_targets, min_targets,
-                   ae_type="nb-conddisp", epochs=3, early_stop=3,
+                   ae_type="nb-conddisp", epochs=50, early_stop=3,
                    hidden_size=(8, 2, 8), verbose=False):
 
     sc.pp.filter_genes(count, min_counts=1)
@@ -45,14 +47,12 @@ def calc_relevance(count, pheno, tf_targets, min_targets,
 
         dca_drivaer(sub, mode='latent',ae_type=ae_type,epochs=epochs,
         early_stop=early_stop,hidden_size=hidden_size,verbose=verbose)
+
+        tf.keras.backend.clear_session()
+
         return(sub.obsm["X_dca"])
 
-    embed = targets.map(fun_dca)
-
-    df_list = [pd.DataFrame(v, columns=[str(k) + '-1', str(k) + '-2']) for k, v in embed.items()]
-    embed_all = None
-    for df in df_list:
-        embed_all = df.copy() if embed_all is None else pd.concat([embed_all, df], axis=1)
+    embed = [fun_dca(x) for x in targets]
 
     # Random forest
     def fun_rfr(x):
@@ -66,11 +66,11 @@ def calc_relevance(count, pheno, tf_targets, min_targets,
         return rf_fit.oob_score_
 
     if isinstance(pheno[0], numbers.Number):
-        rele_score = embed.map(fun_rfr)
+        rele_score = [fun_rfr(x) for x in embed]
     else:
-        rele_score = embed.map(fun_rfc)
+        rele_score = [fun_rfc(x) for x in embed]
 
-    return embed, rele_score, embed_all
+    return embed, rele_score
 
 
 def calc_relevance_pca(adata, pheno, tf_targets, min_targets):
@@ -83,7 +83,7 @@ def calc_relevance_pca(adata, pheno, tf_targets, min_targets):
 
     my_counter = [0]
 
-    def fun_dca(v):
+    def fun_pca(v):
         my_counter[0] += 1
         #print(f'{my_counter[0]} / {len(targets)}')
 
@@ -93,7 +93,7 @@ def calc_relevance_pca(adata, pheno, tf_targets, min_targets):
         ret = tmp.obsm['X_pca'][:,0:1]
         return(ret)
 
-    embed = targets.map(fun_dca)
+    embed = [fun_pca(x) for x in targets]
 
     # Random forest
     def fun_rfr(x):
@@ -107,11 +107,11 @@ def calc_relevance_pca(adata, pheno, tf_targets, min_targets):
         return rf_fit.oob_score_
 
     if isinstance(pheno[0], numbers.Number):
-        rele_score = embed.map(fun_rfr)
+        rele_score = [fun_rfr(x) for x in embed]
     else:
-        rele_score = embed.map(fun_rfc)
+        rele_score = [fun_rfc(x) for x in embed]
 
-    return embed,rele_score
+    return embed, rele_score
 
 
 def calc_relevance_umap(adata, pheno, tf_targets, min_targets):
@@ -124,7 +124,7 @@ def calc_relevance_umap(adata, pheno, tf_targets, min_targets):
 
     my_counter = [0]
 
-    def fun_dca(v):
+    def fun_umap(v):
         my_counter[0] += 1
         #print(f'{my_counter[0]} / {len(targets)}')
 
@@ -136,7 +136,7 @@ def calc_relevance_umap(adata, pheno, tf_targets, min_targets):
         ret = tmp.obsm['X_umap']
         return(ret)
 
-    embed = targets.map(fun_dca)
+    embed = [fun_umap(x) for x in targets]
 
     # Random forest
     def fun_rfr(x):
@@ -150,11 +150,11 @@ def calc_relevance_umap(adata, pheno, tf_targets, min_targets):
         return rf_fit.oob_score_
 
     if isinstance(pheno[0], numbers.Number):
-        rele_score = embed.map(fun_rfr)
+        rele_score = [fun_rfr(x) for x in embed]
     else:
-        rele_score = embed.map(fun_rfc)
+        rele_score = [fun_rfc(x) for x in embed]
 
-    return embed,rele_score
+    return embed, rele_score
 
 
 def calc_relevance_tsne(adata, pheno, tf_targets, min_targets):
@@ -167,7 +167,7 @@ def calc_relevance_tsne(adata, pheno, tf_targets, min_targets):
 
     my_counter = [0]
 
-    def fun_dca(v):
+    def fun_tsne(v):
         my_counter[0] += 1
         #print(f'{my_counter[0]} / {len(targets)}')
 
@@ -179,7 +179,7 @@ def calc_relevance_tsne(adata, pheno, tf_targets, min_targets):
         ret = tmp.obsm['X_tsne']
         return(ret)
 
-    embed = targets.map(fun_dca)
+    embed = [fun_tsne(x) for x in targets]
 
     # Random forest
     def fun_rfr(x):
@@ -193,11 +193,18 @@ def calc_relevance_tsne(adata, pheno, tf_targets, min_targets):
         return rf_fit.oob_score_
 
     if isinstance(pheno[0], numbers.Number):
-        rele_score = embed.map(fun_rfr)
+        rele_score = [fun_rfr(x) for x in embed]
     else:
-        rele_score = embed.map(fun_rfc)
+        rele_score = [fun_rfc(x) for x in embed]
 
-    return embed,rele_score
+    return embed, rele_score
+
+
+def plot_random(original_score, random_scores):
+
+  sns.distplot(random_scores, hist=False, rug=True)
+  plt.axvline(original_score, 0, 2,  color = 'red')
+  plt.title('Distribution random genes')
 
 
 def compare_to_random(count, pheno, geneset,
@@ -228,10 +235,6 @@ def compare_to_random(count, pheno, geneset,
                               early_stop = early_stop)
 
   if plot:
-    import matplotlib.pyplot as plt
-    import seaborn as sns
-    sns.distplot(list(random[1]), hist=False, rug=True)
-    plt.axvline(original_score, 0, 2,  color = 'red')
-    plt.title('Distribution random genes')
+    plot_random(original_score, list(random[1]))
 
   return original_score, list(random[1])
