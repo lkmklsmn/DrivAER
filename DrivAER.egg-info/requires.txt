@@ -1,0 +1,9 @@
+sklearn
+scanpy
+anndata
+keras==2.3.1
+pandas
+seaborn
+matplotlib
+dca
+tensorflow<=1.15.2
