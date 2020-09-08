@@ -129,7 +129,7 @@ def calc_relevance_umap(adata, pheno, tf_targets, min_targets):
         #print(f'{my_counter[0]} / {len(targets)}')
 
         tmp = adata[:,v].copy()
-        sc.pp.pca(tmp)
+        sc.pp.pca(tmp, n_comps= 10)
         sc.pp.neighbors(tmp)
         sc.tl.umap(tmp)
 
@@ -172,7 +172,7 @@ def calc_relevance_tsne(adata, pheno, tf_targets, min_targets):
         #print(f'{my_counter[0]} / {len(targets)}')
 
         tmp = adata[:,v].copy()
-        sc.pp.pca(tmp)
+        sc.pp.pca(tmp, n_comps= 10)
         sc.pp.neighbors(tmp)
         sc.tl.tsne(tmp)
 
