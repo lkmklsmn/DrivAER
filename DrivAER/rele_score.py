@@ -73,8 +73,8 @@ def calc_relevance(count, pheno, tf_targets, min_targets,
         
     names = targets.index.tolist()
 
-    # return embed, rele_score, names
-    return embed, rele_score
+    return embed, rele_score, names
+    # return embed, rele_score
 
 
 def calc_relevance_pca(adata, pheno, tf_targets, min_targets):
@@ -116,8 +116,8 @@ def calc_relevance_pca(adata, pheno, tf_targets, min_targets):
         rele_score = [fun_rfc(x) for x in embed] 
     
     names = targets.index.tolist()
-    # return embed, rele_score, names
-    return embed, rele_score
+    return embed, rele_score, names
+    # return embed, rele_score
 
 
 def calc_relevance_umap(adata, pheno, tf_targets, min_targets):
@@ -161,8 +161,8 @@ def calc_relevance_umap(adata, pheno, tf_targets, min_targets):
         rele_score = [fun_rfc(x) for x in embed]
 
     names = targets.index.tolist()
-    # return embed, rele_score, names
-    return embed, rele_score
+    return embed, rele_score, names
+    # return embed, rele_score
 
 
 def calc_relevance_tsne(adata, pheno, tf_targets, min_targets):
@@ -206,8 +206,8 @@ def calc_relevance_tsne(adata, pheno, tf_targets, min_targets):
         rele_score = [fun_rfc(x) for x in embed]
 
     names = targets.index.tolist()
-    # return embed, rele_score, names
-    return embed, rele_score
+    return embed, rele_score, names
+    # return embed, rele_score
 
 
 def plot_random(original_score, random_scores):
