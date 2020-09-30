@@ -8,7 +8,7 @@ import statsmodels.api as sm
 from dca.api import dca
 
 def rank_plot(result, save=False, path='./'):
-    score = pd.DataFrame(list(result[1].items()), columns=['Signature', 'Relevance Score'])
+    score = pd.DataFrame({'Signature': result[2], 'Relevance Score': result[1]})
     score = score.sort_values('Relevance Score',ascending=False)
     new_df = score.head(5)
     new_df = new_df.append(score.tail(5))
@@ -28,7 +28,8 @@ def rank_plot(result, save=False, path='./'):
     print("Worse_TF",":",worse_TF)
 
 def embedding_plot(result, tf_name, pheno, save = False, path='./'):
-    em = pd.DataFrame(result[0][tf_name],columns=['dca1','dca2'])
+    res = {result[2][i]: result[0][i] for i in range(len(result[2]))}
+    em = pd.DataFrame(res[tf_name],columns=['dca1','dca2'])
     plt.figure(figsize=(10, 8))
 
     if isinstance(pheno[0], numbers.Number):
@@ -49,7 +50,8 @@ def embedding_plot(result, tf_name, pheno, save = False, path='./'):
         fig.savefig(path + tf_name + '.svg', bbox_inches='tight')
 
 def gene_plot(result,tf_name,gene,count,pheno,save = False, path='./'):
-    em = pd.DataFrame(result[0][tf_name],columns=['dca1','dca2'])
+    res = {result[2][i]: result[0][i] for i in range(len(result[2]))}
+    em = pd.DataFrame(res[tf_name],columns=['dca1','dca2'])
     plt.figure(figsize=(10,8))
     if isinstance(pheno[0], numbers.Number):
         sc.pp.scale(count)
