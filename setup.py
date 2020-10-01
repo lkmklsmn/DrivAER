@@ -8,7 +8,7 @@ setuptools.setup(
     author_email="lkmklsmn@gmail.com",
     packages=['DrivAER'],
     install_requires=['sklearn','scanpy','anndata', 'keras==2.3.1',
-                      'pandas','seaborn','matplotlib','dca','tensorflow<=1.15.2'
+                      'pandas','seaborn','matplotlib','dca','tensorflow<=1.15.4'
                       ],
     package_data={'DrivAER': ['data/*.txt','annotations/*.gmt','annotations/*.tsv']}
 )
