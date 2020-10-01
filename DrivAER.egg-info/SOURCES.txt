@@ -40,9 +40,16 @@ DrivAER/data/Paul_Ery.txt
 DrivAER/data/Paul_Mono.txt
 Reproducibiliy/Figure1.ipynb
 Reproducibiliy/Figure2.ipynb
+Reproducibiliy/Figure3.R
 Reproducibiliy/Simulation_DCA.ipynb
 Reproducibiliy/Simulation_DrivAER.ipynb
 Reproducibiliy/splatter.simulate path.R
 Reproducibiliy/splatter.simulate.two.groups.R
+Reproducibiliy/data/PAGADA_accuracies.csv
+Reproducibiliy/data/VISION_autocorrelation.csv
+Reproducibiliy/data/accuracies.csv
+Reproducibiliy/data/accuracies_four_groups.csv
+Reproducibiliy/data/hidden_size_diff_accuracies.csv
 Tutorial/DrivAER - blood development
 Tutorial/DrivAER - interferon stimulation
+dist/DrivAER-0.0.2-py3.6.egg

@@ -25,6 +25,7 @@ def calc_relevance(count, pheno, tf_targets, min_targets,
     tf_targets = tf_targets.map(lambda x: sorted(list(set(x) & set(gene))))
     # Restrict to TFs with at least min_targets genes
     targets =  tf_targets[tf_targets.map(lambda x: len(x) >= min_targets)]
+    # "targets" is a pandas series, with index representing TF names. Each row is a list of target genes.
 
     my_counter = [0]
 
@@ -69,8 +70,11 @@ def calc_relevance(count, pheno, tf_targets, min_targets,
         rele_score = [fun_rfr(x) for x in embed]
     else:
         rele_score = [fun_rfc(x) for x in embed]
+        
+    names = targets.index.tolist()
 
-    return embed, rele_score
+    return embed, rele_score, names
+    # return embed, rele_score
 
 
 def calc_relevance_pca(adata, pheno, tf_targets, min_targets):
@@ -109,9 +113,11 @@ def calc_relevance_pca(adata, pheno, tf_targets, min_targets):
     if isinstance(pheno[0], numbers.Number):
         rele_score = [fun_rfr(x) for x in embed]
     else:
-        rele_score = [fun_rfc(x) for x in embed]
-
-    return embed, rele_score
+        rele_score = [fun_rfc(x) for x in embed] 
+    
+    names = targets.index.tolist()
+    return embed, rele_score, names
+    # return embed, rele_score
 
 
 def calc_relevance_umap(adata, pheno, tf_targets, min_targets):
@@ -154,7 +160,9 @@ def calc_relevance_umap(adata, pheno, tf_targets, min_targets):
     else:
         rele_score = [fun_rfc(x) for x in embed]
 
-    return embed, rele_score
+    names = targets.index.tolist()
+    return embed, rele_score, names
+    # return embed, rele_score
 
 
 def calc_relevance_tsne(adata, pheno, tf_targets, min_targets):
@@ -197,7 +205,9 @@ def calc_relevance_tsne(adata, pheno, tf_targets, min_targets):
     else:
         rele_score = [fun_rfc(x) for x in embed]
 
-    return embed, rele_score
+    names = targets.index.tolist()
+    return embed, rele_score, names
+    # return embed, rele_score
 
 
 def plot_random(original_score, random_scores):
