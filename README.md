@@ -15,8 +15,8 @@ To reproduce the analysis and figures presented in our manuscript please see the
 
 ## Check out our live, interactive tutorial!
 The following [Google colab](https://colab.research.google.com/) notebooks allow you to interactively explore DrivAER and can be run within your browser. We have prepared two analysis examples:
-1. [Blood development](https://colab.research.google.com/github/lkmklsmn/DrivAER/blob/master/Tutorial/DrivAER%20-%20blood%20development)
-2. [Interferon stimulation](https://colab.research.google.com/github/lkmklsmn/DrivAER/blob/master/Tutorial/DrivAER%20-%20interferon%20stimulation)
+1. [Blood development](https://colab.research.google.com/drive/1zrQ7l3Orz7h-eGEX7MHRIBTTXzL_vu9O#scrollTo=VzAzfdHZrOWz)
+2. [Interferon stimulation](https://colab.research.google.com/drive/13DA_dYlRjlKma1d9VB65JrfPhBvkEGDC#scrollTo=roa2rIBT1s_R)
 
 ## Installation
 ### via pip
