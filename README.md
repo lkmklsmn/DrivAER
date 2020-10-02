@@ -11,7 +11,7 @@ See our [preprint](https://www.biorxiv.org/content/10.1101/864165v1) for more de
 **Workflow** (a) DrivAER iteratively subjects annotated gene sets to unsupervised dimension reduction via DCA. (b) For each gene set the generated two-dimensional data manifold coordinates are used as (c) input features in a random forest model to predict the outcome of interest (i.e. pseudotemporal ordering). (d) The random forest prediction accuracy represents the relevance score. 
 
 ## Reproducibility
-To reproduce the analysis and figures presented in our manuscript please see the [*Reproducibility*](https://github.com/lkmklsmn/DrivAER/tree/master/Reproducibiliy) folder.
+To reproduce the analysis and figures presented in our manuscript please see the [*Reproducibility*](https://github.com/lkmklsmn/DrivAER/tree/master/Reproducibility) folder.
 
 ## Check out our live, interactive tutorial!
 The following [Google colab](https://colab.research.google.com/) notebooks allow you to interactively explore DrivAER and can be run within your browser. We have prepared two analysis examples:
@@ -64,7 +64,9 @@ Users can create your own gene set annotations. The format is a pandas series. I
 ### Step 2: Calculate relevance scores
 	res = dv.calc_relevance(count = your_count, pheno = your_pt, tf_targets = C3_mouse, min_targets=5,
                    ae_type="nb-conddisp", epochs=100, early_stop=3, hidden_size=(8, 2, 8), verbose=False)
-		   
+
+Additionally, users can replace the DCA with other dimension reduction methods. The commands *calc_relevance_pca*, *calc_relevance_tsne*, *calc_relevance_umap* will perform dimension reduction based on PCA, tSNE and UMAP, respectively.
+
 ### Step 3: Generate visualizations
 	dv.rank_plot(result, save, path)
 	dv.embedding_plot(result, tf_name, pheno, datatype, save, path)
