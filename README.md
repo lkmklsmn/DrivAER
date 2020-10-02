@@ -11,7 +11,7 @@ See our [preprint](https://www.biorxiv.org/content/10.1101/864165v1) for more de
 **Workflow** (a) DrivAER iteratively subjects annotated gene sets to unsupervised dimension reduction via DCA. (b) For each gene set the generated two-dimensional data manifold coordinates are used as (c) input features in a random forest model to predict the outcome of interest (i.e. pseudotemporal ordering). (d) The random forest prediction accuracy represents the relevance score. 
 
 ## Reproducibility
-To reproduce the analysis and figures presented in our manuscript please see the [*Reproducibility*](https://github.com/lkmklsmn/DrivAER/tree/master/Reproducibiliy) folder.
+To reproduce the analysis and figures presented in our manuscript please see the [*Reproducibility*](https://github.com/lkmklsmn/DrivAER/tree/master/Reproducibility) folder.
 
 ## Check out our live, interactive tutorial!
 The following [Google colab](https://colab.research.google.com/) notebooks allow you to interactively explore DrivAER and can be run within your browser. We have prepared two analysis examples:
