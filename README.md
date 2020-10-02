@@ -64,7 +64,9 @@ Users can create your own gene set annotations. The format is a pandas series. I
 ### Step 2: Calculate relevance scores
 	res = dv.calc_relevance(count = your_count, pheno = your_pt, tf_targets = C3_mouse, min_targets=5,
                    ae_type="nb-conddisp", epochs=100, early_stop=3, hidden_size=(8, 2, 8), verbose=False)
-		   
+
+Additionally, users can replace the DCA with other dimension reduction methods. The commands *calc_relevance_pca*, *calc_relevance_tsne*, *calc_relevance_umap* will perform dimension reduction based on PCA, tSNE and UMAP, respectively.
+
 ### Step 3: Generate visualizations
 	dv.rank_plot(result, save, path)
 	dv.embedding_plot(result, tf_name, pheno, datatype, save, path)
